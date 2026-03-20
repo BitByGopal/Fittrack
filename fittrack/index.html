@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="FitTrack"/>
+<meta name="theme-color" content="#63553F"/>
+<meta name="description" content="Personal health tracker — fasting, meals, water, weight and cook guide"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icons/icon-192.png"/>
+<title>FitTrack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+<div class="app">
+
+  <!-- Sidebar Nav -->
+  <nav class="sidebar">
+    <div class="brand">
+      <span class="brand-icon">⬡</span>
+      <span class="brand-name">FITTRACK</span>
+    </div>
+    <div class="nav-links">
+      <button class="nav-btn active" data-page="dashboard">
+        <span class="nav-icon">◈</span><span>Dashboard</span>
+      </button>
+      <button class="nav-btn" data-page="fast">
+        <span class="nav-icon">◷</span><span>Fasting</span>
+      </button>
+      <button class="nav-btn" data-page="meals">
+        <span class="nav-icon">◍</span><span>Meals</span>
+      </button>
+      <button class="nav-btn" data-page="water">
+        <span class="nav-icon">◌</span><span>Water</span>
+      </button>
+      <button class="nav-btn" data-page="weight">
+        <span class="nav-icon">◎</span><span>Weight</span>
+      </button>
+      <button class="nav-btn" data-page="food">
+        <span class="nav-icon">◉</span><span>Food Guide</span>
+      </button>
+      <button class="nav-btn" data-page="cook">
+        <span class="nav-icon">◫</span><span>Cook Guide</span>
+      </button>
+    </div>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="avatar">P</div>
+        <div>
+          <div class="user-name">Prince</div>
+          <div class="user-goal">Goal: 71 kg</div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main">
+
+    <!-- DASHBOARD PAGE -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-header">
+        <h1>Dashboard</h1>
+        <div class="date-chip" id="today-date"></div>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card accent-green">
+          <div class="stat-label">Current Weight</div>
+          <div class="stat-value" id="dash-weight">— kg</div>
+          <div class="stat-sub">Target: 71 kg</div>
+        </div>
+        <div class="stat-card accent-blue">
+          <div class="stat-label">Lost So Far</div>
+          <div class="stat-value" id="dash-lost">— kg</div>
+          <div class="stat-sub">Started: 91 kg</div>
+        </div>
+        <div class="stat-card accent-orange">
+          <div class="stat-label">Water Today</div>
+          <div class="stat-value" id="dash-water">0 / 12</div>
+          <div class="stat-sub">glasses (3L target)</div>
+        </div>
+        <div class="stat-card accent-purple">
+          <div class="stat-label">Fasting</div>
+          <div class="stat-value" id="dash-fast-status">Inactive</div>
+          <div class="stat-sub" id="dash-fast-sub">Start at 9 PM</div>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="card mt-1">
+        <div class="card-header">Weight Loss Progress</div>
+        <div class="progress-info">
+          <span>91 kg</span>
+          <span id="prog-current">— kg</span>
+          <span>71 kg</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-bar"></div>
+        </div>
+        <div class="progress-label" id="progress-label">Log your weight to see progress</div>
+      </div>
+
+      <!-- Today meals summary -->
+      <div class="card mt-1">
+        <div class="card-header">Today's Meals</div>
+        <div id="dash-meals-summary" class="meals-summary">
+          <div class="empty-state">No meals logged today</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FASTING PAGE -->
+    <div class="page" id="page-fast">
+      <div class="page-header">
+        <h1>Fasting Timer</h1>
+        <div class="badge-chip">16:8 Protocol</div>
+      </div>
+
+      <div class="fast-center">
+        <div class="ring-wrap">
+          <svg class="ring-svg" viewBox="0 0 220 220">
+            <circle class="ring-bg" cx="110" cy="110" r="96"/>
+            <circle class="ring-fill" id="ring-fill" cx="110" cy="110" r="96"
+              stroke-dasharray="603" stroke-dashoffset="603"/>
+          </svg>
+          <div class="ring-inner">
+            <div class="ring-label" id="ring-label">NOT FASTING</div>
+            <div class="ring-time" id="ring-time">00:00:00</div>
+            <div class="ring-sub" id="ring-sub">Press start to begin</div>
+          </div>
+        </div>
+
+        <div class="fast-controls">
+          <button class="btn-primary" id="fast-btn" onclick="toggleFast()">Start Fast</button>
+          <button class="btn-ghost" onclick="resetFast()">Reset</button>
+        </div>
+
+        <div class="fast-info-grid">
+          <div class="fast-info-card">
+            <div class="fi-label">Fast Start</div>
+            <div class="fi-val" id="fast-start-time">—</div>
+          </div>
+          <div class="fast-info-card">
+            <div class="fi-label">Eat Window</div>
+            <div class="fi-val">1 PM – 9 PM</div>
+          </div>
+          <div class="fast-info-card">
+            <div class="fi-label">Target</div>
+            <div class="fi-val">16 hrs</div>
+          </div>
+          <div class="fast-info-card">
+            <div class="fi-label">Progress</div>
+            <div class="fi-val" id="fast-pct">0%</div>
+          </div>
+        </div>
+
+        <div class="fasting-tips">
+          <div class="tip-title">During Fast — Allowed</div>
+          <div class="tip-tags">
+            <span class="tip-tag ok">Water</span>
+            <span class="tip-tag ok">Black Coffee</span>
+            <span class="tip-tag ok">Green Tea</span>
+            <span class="tip-tag ok">Lemon Water (no sugar)</span>
+            <span class="tip-tag bad">Any food</span>
+            <span class="tip-tag bad">Chai with sugar</span>
+            <span class="tip-tag bad">Juice</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEALS PAGE -->
+    <div class="page" id="page-meals">
+      <div class="page-header">
+        <h1>Meal Log</h1>
+        <button class="btn-primary small" onclick="openMealModal()">+ Add Meal</button>
+      </div>
+
+      <div class="meal-type-tabs">
+        <button class="mtab active" data-type="all" onclick="filterMeals('all',this)">All</button>
+        <button class="mtab" data-type="Lunch" onclick="filterMeals('Lunch',this)">Lunch</button>
+        <button class="mtab" data-type="Snack" onclick="filterMeals('Snack',this)">Snack</button>
+        <button class="mtab" data-type="Dinner" onclick="filterMeals('Dinner',this)">Dinner</button>
+      </div>
+
+      <div id="meals-list" class="meals-list"></div>
+
+      <!-- Meal Modal -->
+      <div class="modal-overlay" id="meal-modal">
+        <div class="modal">
+          <div class="modal-header">
+            <h3>Log a Meal</h3>
+            <button class="modal-close" onclick="closeMealModal()">✕</button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Meal Type</label>
+              <select id="meal-type">
+                <option>Lunch</option>
+                <option>Snack</option>
+                <option>Dinner</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Food Items (comma separated)</label>
+              <input type="text" id="meal-items" placeholder="e.g. Dal, 2 rotis, Cucumber salad"/>
+            </div>
+            <div class="form-group">
+              <label>Notes (optional)</label>
+              <input type="text" id="meal-notes" placeholder="e.g. Skipped sabzi today"/>
+            </div>
+            <button class="btn-primary full" onclick="saveMeal()">Save Meal</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WATER PAGE -->
+    <div class="page" id="page-water">
+      <div class="page-header">
+        <h1>Water Tracker</h1>
+        <div class="badge-chip">Target: 3 Litres</div>
+      </div>
+
+      <div class="water-center">
+        <div class="water-bottle-wrap">
+          <div class="water-bottle">
+            <div class="water-fill" id="water-fill"></div>
+            <div class="water-count-overlay" id="water-overlay">0 / 12</div>
+          </div>
+          <div class="water-liters" id="water-liters">0.0 L</div>
+        </div>
+
+        <div class="water-glasses">
+          <div id="glasses-grid" class="glasses-grid"></div>
+        </div>
+
+        <div class="water-btn-row">
+          <button class="btn-primary" onclick="addGlass()">+ Add Glass (250ml)</button>
+          <button class="btn-ghost" onclick="removeGlass()">– Remove</button>
+          <button class="btn-ghost" onclick="resetWater()">Reset</button>
+        </div>
+
+        <div class="water-tips">
+          <div class="wtip">Drink 1 glass when you wake up (during fast — okay!)</div>
+          <div class="wtip">1 glass before each meal</div>
+          <div class="wtip">Sip between 1 PM–9 PM consistently</div>
+          <div class="wtip">Stop 30 min before sleep</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEIGHT PAGE -->
+    <div class="page" id="page-weight">
+      <div class="page-header">
+        <h1>Weight Tracker</h1>
+        <button class="btn-primary small" onclick="openWeightModal()">+ Log Weight</button>
+      </div>
+
+      <div class="weight-input-row">
+        <div class="card inline-card">
+          <div class="card-header">Log Today's Weight</div>
+          <div class="weight-form">
+            <input type="number" id="weight-input" placeholder="e.g. 90.5" step="0.1" min="40" max="200"/>
+            <span class="unit-label">kg</span>
+            <button class="btn-primary" onclick="saveWeight()">Save</button>
+          </div>
+          <div class="weight-note">Weigh yourself every Monday morning (fasted)</div>
+        </div>
+      </div>
+
+      <div class="card mt-1">
+        <div class="card-header">Weight History</div>
+        <div id="weight-history" class="weight-history"></div>
+      </div>
+
+      <div class="card mt-1">
+        <div class="card-header">Mini Chart</div>
+        <canvas id="weight-chart" height="160"></canvas>
+      </div>
+    </div>
+
+    <!-- FOOD GUIDE PAGE -->
+    <div class="page" id="page-food">
+      <div class="page-header">
+        <h1>Food Guide</h1>
+        <div class="badge-chip">Quantities & Macros</div>
+      </div>
+
+      <div class="food-tabs">
+        <button class="ftab active" data-cat="lunch" onclick="showFoodCat('lunch',this)">Lunch</button>
+        <button class="ftab" data-cat="dinner" onclick="showFoodCat('dinner',this)">Dinner</button>
+        <button class="ftab" data-cat="snack" onclick="showFoodCat('snack',this)">Snacks</button>
+        <button class="ftab" data-cat="cook" onclick="showFoodCat('cook',this)">Weekend Cook</button>
+      </div>
+
+      <div id="food-list" class="food-list"></div>
+    </div>
+
+    <!-- COOK GUIDE PAGE -->
+    <div class="page" id="page-cook">
+      <div class="page-header">
+        <h1>Cook Guide</h1>
+        <div class="badge-chip">Step-by-step • Oil-free tips</div>
+      </div>
+
+      <div class="cook-tabs">
+        <button class="ctab active" onclick="showCookRecipe('poha',this)">Poha</button>
+        <button class="ctab" onclick="showCookRecipe('upma',this)">Upma</button>
+        <button class="ctab" onclick="showCookRecipe('chapathi',this)">Chapathi</button>
+        <button class="ctab" onclick="showCookRecipe('dal',this)">Dal Curry</button>
+        <button class="ctab" onclick="showCookRecipe('sabzi',this)">Sabzi</button>
+        <button class="ctab" onclick="showCookRecipe('paneer',this)">Paneer Bhurji</button>
+        <button class="ctab" onclick="showCookRecipe('chilla',this)">Moong Chilla</button>
+        <button class="ctab" onclick="showCookRecipe('oats',this)">Oats Bowl</button>
+      </div>
+
+      <div id="cook-recipe" class="cook-recipe-wrap"></div>
+    </div>
+
+  </main>
+</div>
+
+
+<!-- Mobile Bottom Nav -->
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="bnav-btn active" data-page="dashboard">
+    <span class="bnav-icon">⊞</span>
+    <span class="bnav-label">Home</span>
+  </button>
+  <button class="bnav-btn" data-page="fast">
+    <span class="bnav-icon">◷</span>
+    <span class="bnav-label">Fast</span>
+  </button>
+  <button class="bnav-btn" data-page="meals">
+    <span class="bnav-icon">◍</span>
+    <span class="bnav-label">Meals</span>
+  </button>
+  <button class="bnav-btn" data-page="water">
+    <span class="bnav-icon">◌</span>
+    <span class="bnav-label">Water</span>
+  </button>
+  <button class="bnav-btn" data-page="more">
+    <span class="bnav-icon">⋯</span>
+    <span class="bnav-label">More</span>
+  </button>
+</nav>
+
+<!-- More menu (mobile) -->
+<div class="more-overlay" id="more-overlay" onclick="closeMore()"></div>
+<div class="more-sheet" id="more-sheet">
+  <div class="more-handle"></div>
+  <div class="more-title">More</div>
+  <div class="more-grid">
+    <button class="more-item" onclick="gotoPage('weight')">
+      <span class="more-icon">◎</span><span>Weight</span>
+    </button>
+    <button class="more-item" onclick="gotoPage('food')">
+      <span class="more-icon">◉</span><span>Food Guide</span>
+    </button>
+    <button class="more-item" onclick="gotoPage('cook')">
+      <span class="more-icon">◫</span><span>Cook Guide</span>
+    </button>
+  </div>
+</div>
+
+<!-- PWA Install Banner -->
+<div class="install-banner" id="install-banner">
+  <div class="install-left">
+    <img src="icons/icon-192.png" class="install-icon" alt="FitTrack"/>
+    <div>
+      <div class="install-title">Install FitTrack</div>
+      <div class="install-sub">Add to home screen — works offline!</div>
+    </div>
+  </div>
+  <div class="install-btns">
+    <button class="install-yes" id="install-btn">Install</button>
+    <button class="install-no" onclick="dismissInstall()">✕</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

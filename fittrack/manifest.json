@@ -1,0 +1,46 @@
+{
+  "name": "FitTrack — Prince's Health App",
+  "short_name": "FitTrack",
+  "description": "Personal health tracker — fasting, meals, water, weight & cook guide",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#FAF7F2",
+  "theme_color": "#63553F",
+  "orientation": "portrait",
+  "scope": "./",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Fasting Timer",
+      "short_name": "Fast",
+      "url": "./index.html#fast",
+      "description": "Start your 16:8 fast"
+    },
+    {
+      "name": "Log Meal",
+      "short_name": "Meals",
+      "url": "./index.html#meals",
+      "description": "Log today's meal"
+    },
+    {
+      "name": "Water Tracker",
+      "short_name": "Water",
+      "url": "./index.html#water",
+      "description": "Track water intake"
+    }
+  ]
+}
